@@ -1,0 +1,42 @@
+name: Laravel CI Pipeline
+
+# Pipeline berjalan otomatis saat Push atau Pull Request
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1. Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: 2. Setup PHP dengan Xdebug
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2' # Versi PHP yang kita gunakan
+        coverage: xdebug   # Wajib diaktifkan untuk laporan coverage
+
+    - name: 3. Persiapkan Environment (Build)
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+    - name: 4. Install Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: 5. Generate Application Key
+      run: php artisan key:generate
+
+    - name: 6. Siapkan Database Testing (SQLite)
+      run: |
+        mkdir -p database
+        touch database/database.sqlite
+
+    - name: 7. Jalankan Seluruh Test & Generate Coverage
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
+      run: php artisan test --coverage-text
