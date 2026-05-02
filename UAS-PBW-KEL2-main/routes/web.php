@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\livewire\Beranda;
-use App\livewire\User;
-use App\livewire\Laporan;
-use App\livewire\Produk;
-use App\livewire\Transaksi;
+use App\Livewire\Beranda;
+use App\Livewire\User;
+use App\Livewire\Laporan;
+use App\Livewire\Produk;
+use App\Livewire\Transaksi;
 
 Route::get('/', function () {
     return view('welcome');
