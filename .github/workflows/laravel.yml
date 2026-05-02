@@ -10,6 +10,11 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    
+    # KUNCI PERBAIKAN: Menambahkan working-directory
+    defaults:
+      run:
+        working-directory: ./UAS-PBW-KEL2-main
 
     steps:
     - name: 1. Checkout Repository
